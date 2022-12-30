@@ -1,0 +1,55 @@
+-- đổi đấu các phần tử
+negateAll :: [Integer] -> [Integer]
+negateAll[] = []
+negateAll(x:xs) = (-x):negateAll xs
+
+-- tìm ví trí x trong list
+find :: Integer -> [Integer] -> Integer
+find x [] = -1
+find x (a:as) = if x == a then 0 else 1 + find x as
+
+-- Có list có phải số dương ko 
+allPositive :: [Integer] -> Bool
+allPositive [] = True
+allPositive (a:as) = if a <= 0 then False else allPositive as
+
+-- Xóa các phần tử trùng nhau
+removeDuplicates :: [Integer] -> [Integer]
+removeDuplicates [x] = [x]
+removeDuplicates (x1:x2:xs) = if x1 == x2 then removeDuplicates (x2:xs) else removeDuplicates (x2:xs) ++ [x1]
+
+-- cộng 2 list
+merge :: [Integer] -> [Integer] -> [Integer]
+merge [] [] = []
+merge [] x = x
+merge x [] = x
+merge (x:xs) (y:ys) = x : y : merge xs ys
+
+-- kiểm tra xem list có tăng dần ko
+sorted :: [Integer] -> Bool
+sorted [] = True
+sorted [x] = True
+sorted (x1:x2:xs) = if x1 >= x2 then False else sorted (x2:xs)
+
+-- lấy ra số nguyên dương
+positives :: [Integer] -> [Integer]
+positives [] = []
+positives xs = [x | x <- xs, x > 0]
+
+-- Xóa node cây nhị phân tìm kiếm 
+delete :: (Ord a) => a -> Tree a -> Tree a
+delete x Empty = Empty
+delete x (Node a left right)
+    | x < a  = Node a (delete x left) right
+    | x > a  = Node a left (delete x right)
+    | x == a = deleteRoot (Node a left right)
+
+deleteRoot :: (Ord a) => Tree a -> Tree a
+deleteRoot (Node _ Empty right) = right
+deleteRoot (Node _ left Empty) = left
+deleteRoot (Node _ left right) = let minRight = findMin right
+                                 in Node minRight left (delete minRight right)
+
+findMin :: (Ord a) => Tree a -> a
+findMin (Node a Empty _) = a
+findMin (Node _ left _) = findMin left
